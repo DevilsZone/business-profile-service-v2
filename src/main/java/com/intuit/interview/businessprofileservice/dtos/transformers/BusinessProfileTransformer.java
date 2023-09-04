@@ -52,7 +52,6 @@ public class BusinessProfileTransformer {
     public static BusinessProfile getUpdatedBusinessProfileForUpdateRequest(
             BusinessProfile businessProfile, BusinessProfileUpdateDto businessProfileUpdateDto
     ) {
-
         if (businessProfileUpdateDto.getCompanyName() != null) {
             businessProfile.setCompanyName(businessProfileUpdateDto.getCompanyName());
         }

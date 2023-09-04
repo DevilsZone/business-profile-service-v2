@@ -40,7 +40,7 @@ public class BusinessProfileServiceImpl implements BusinessProfileService {
         BusinessProfile existingBusinessProfile = businessProfileRepository.getBusinessProfileByLegalName(
                 createDto.getLegalName()
         );
-        if (existingBusinessProfile == null) {
+        if (existingBusinessProfile != null) {
             throw new AppException(ErrorCause.EXISTING_BUSINESS_PROFILE.name());
         }
         BusinessProfile businessProfile =
@@ -91,7 +91,7 @@ public class BusinessProfileServiceImpl implements BusinessProfileService {
         return response > 0;
     }
 
-    private void validateBusinessProfileForCreate(BusinessProfile businessProfile) {
+    public void validateBusinessProfileForCreate(BusinessProfile businessProfile) {
         List<Mono<Void>> futures = new ArrayList<>();
         for (ProductValidationService service : productValidationServiceList) {
             Mono<Void> validation = service.validateBusinessProfileForCreate(businessProfile)
@@ -105,7 +105,7 @@ public class BusinessProfileServiceImpl implements BusinessProfileService {
         }
     }
 
-    private void validateBusinessProfileForUpdate(BusinessProfile businessProfile) {
+    public void validateBusinessProfileForUpdate(BusinessProfile businessProfile) {
         List<Mono<Void>> futures = new ArrayList<>();
         for (ProductValidationService service : productValidationServiceList) {
             Mono<Void> validation = service.validateBusinessProfileForUpdate(businessProfile)
@@ -119,7 +119,7 @@ public class BusinessProfileServiceImpl implements BusinessProfileService {
         }
     }
 
-    private void validateBusinessProfileForDelete(BusinessProfile businessProfile) {
+    public void validateBusinessProfileForDelete(BusinessProfile businessProfile) {
         List<Mono<Void>> futures = new ArrayList<>();
         for (ProductValidationService service : productValidationServiceList) {
             Mono<Void> validation = service.validateBusinessProfileForDelete(businessProfile)

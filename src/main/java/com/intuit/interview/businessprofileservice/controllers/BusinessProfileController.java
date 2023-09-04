@@ -28,7 +28,7 @@ public class BusinessProfileController {
     public ResponseEntity<ResponseWrapper<BusinessProfileResponse>> createBusinessProfile(
             @RequestBody @Valid BusinessProfileCreateDto createDto) {
         BusinessProfileResponse response = businessProfileService.createBusinessProfile(createDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(ResponseWrapper.success(response));
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseWrapper.success(response));
     }
 
     @GetMapping
