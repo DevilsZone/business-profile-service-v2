@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 public interface BusinessProfileRepository extends MongoRepository<BusinessProfile, String> {
     @Nullable BusinessProfile getBusinessProfileByLegalName(String companyName);
 
-    Boolean deleteBusinessProfileByLegalName(String companyName);
+    Long deleteBusinessProfileByLegalName(String companyName);
 }

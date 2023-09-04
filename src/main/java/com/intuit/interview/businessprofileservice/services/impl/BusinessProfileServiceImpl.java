@@ -87,7 +87,8 @@ public class BusinessProfileServiceImpl implements BusinessProfileService {
             throw new AppException(ErrorCause.BUSINESS_PROFILE_NOT_FOUND.name());
         }
         validateBusinessProfileForDelete(businessProfile);
-        return businessProfileRepository.deleteBusinessProfileByLegalName(businessProfile.getLegalName());
+        Long response = businessProfileRepository.deleteBusinessProfileByLegalName(businessProfile.getLegalName());
+        return response > 0;
     }
 
     private void validateBusinessProfileForCreate(BusinessProfile businessProfile) {
