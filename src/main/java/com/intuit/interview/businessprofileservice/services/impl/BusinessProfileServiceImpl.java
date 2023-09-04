@@ -7,23 +7,32 @@ import com.intuit.interview.businessprofileservice.dtos.response.BusinessProfile
 import com.intuit.interview.businessprofileservice.dtos.transformers.BusinessProfileTransformer;
 import com.intuit.interview.businessprofileservice.enums.ErrorCause;
 import com.intuit.interview.businessprofileservice.exceptions.AppException;
+import com.intuit.interview.businessprofileservice.external.validations.ProductValidationService;
 import com.intuit.interview.businessprofileservice.models.BusinessProfile;
 import com.intuit.interview.businessprofileservice.repositories.BusinessProfileRepository;
 import com.intuit.interview.businessprofileservice.services.BusinessProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class BusinessProfileServiceImpl implements BusinessProfileService {
     private final BusinessProfileRepository businessProfileRepository;
 
+    private final List<ProductValidationService> productValidationServiceList;
+
     @Autowired
     public BusinessProfileServiceImpl(
-            BusinessProfileRepository businessProfileRepository
+            BusinessProfileRepository businessProfileRepository,
+            List<ProductValidationService> productValidationServiceList
     ) {
         this.businessProfileRepository = businessProfileRepository;
+        this.productValidationServiceList = productValidationServiceList;
     }
 
     @Override
@@ -34,10 +43,11 @@ public class BusinessProfileServiceImpl implements BusinessProfileService {
         if (existingBusinessProfile == null) {
             throw new AppException(ErrorCause.EXISTING_BUSINESS_PROFILE.name());
         }
+        BusinessProfile businessProfile =
+                BusinessProfileTransformer.convertBusinessProfileCreateDtoToBusinessProfile(createDto);
+        validateBusinessProfileForCreate(businessProfile);
         return BusinessProfileTransformer.convertBusinessProfileToBusinessProfileResponse(
-                businessProfileRepository.save(
-                        BusinessProfileTransformer.convertBusinessProfileCreateDtoToBusinessProfile(createDto)
-                )
+                businessProfileRepository.save(businessProfile)
         );
     }
 
@@ -59,15 +69,67 @@ public class BusinessProfileServiceImpl implements BusinessProfileService {
         if (businessProfile == null) {
             throw new AppException(ErrorCause.BUSINESS_PROFILE_NOT_FOUND.name());
         }
+        BusinessProfile updatedBusinessProfile = BusinessProfileTransformer.getUpdatedBusinessProfileForUpdateRequest(
+                businessProfile, updateDto
+        );
+        validateBusinessProfileForUpdate(updatedBusinessProfile);
         return BusinessProfileTransformer.convertBusinessProfileToBusinessProfileResponse(
-                businessProfileRepository.save(BusinessProfileTransformer.getUpdatedBusinessProfileForUpdateRequest(
-                        businessProfile, updateDto
-                ))
+                businessProfileRepository.save(updatedBusinessProfile)
         );
     }
 
     @Override
     public boolean deleteBusinessProfile(BusinessProfileDeleteDto deleteDto) {
-        return businessProfileRepository.deleteBusinessProfileByLegalName(deleteDto.getLegalName());
+        BusinessProfile businessProfile = businessProfileRepository.getBusinessProfileByLegalName(
+                deleteDto.getLegalName()
+        );
+        if (businessProfile == null) {
+            throw new AppException(ErrorCause.BUSINESS_PROFILE_NOT_FOUND.name());
+        }
+        validateBusinessProfileForDelete(businessProfile);
+        return businessProfileRepository.deleteBusinessProfileByLegalName(businessProfile.getLegalName());
     }
+
+    private void validateBusinessProfileForCreate(BusinessProfile businessProfile) {
+        List<Mono<Void>> futures = new ArrayList<>();
+        for (ProductValidationService service : productValidationServiceList) {
+            Mono<Void> validation = service.validateBusinessProfileForCreate(businessProfile)
+                    .subscribeOn(Schedulers.boundedElastic());
+            futures.add(validation);
+        }
+        try {
+            Mono.when(futures).block();
+        } catch (Exception e) {
+            throw new AppException(ErrorCause.VALIDATION_FAILED.name());
+        }
+    }
+
+    private void validateBusinessProfileForUpdate(BusinessProfile businessProfile) {
+        List<Mono<Void>> futures = new ArrayList<>();
+        for (ProductValidationService service : productValidationServiceList) {
+            Mono<Void> validation = service.validateBusinessProfileForUpdate(businessProfile)
+                    .subscribeOn(Schedulers.boundedElastic());
+            futures.add(validation);
+        }
+        try {
+            Mono.when(futures).block();
+        } catch (Exception e) {
+            throw new AppException(ErrorCause.VALIDATION_FAILED.name());
+        }
+    }
+
+    private void validateBusinessProfileForDelete(BusinessProfile businessProfile) {
+        List<Mono<Void>> futures = new ArrayList<>();
+        for (ProductValidationService service : productValidationServiceList) {
+            Mono<Void> validation = service.validateBusinessProfileForDelete(businessProfile)
+                    .subscribeOn(Schedulers.boundedElastic());
+            futures.add(validation);
+        }
+        try {
+            Mono.when(futures).block();
+        } catch (Exception e) {
+            throw new AppException(ErrorCause.VALIDATION_FAILED.name());
+        }
+    }
+
 }

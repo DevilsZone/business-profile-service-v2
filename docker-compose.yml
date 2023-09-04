@@ -1,0 +1,26 @@
+version: "3.8"
+services:
+  mongo:
+    container_name: "business-profile-mongo"
+    image: mongo:6.0
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+    volumes:
+      - mongodb_data_container:/data/db
+
+  business-profile-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongo
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://root:root@mongo:27017/admin
+
+volumes:
+  mongodb_data_container:

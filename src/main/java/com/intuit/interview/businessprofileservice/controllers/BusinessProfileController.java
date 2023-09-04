@@ -15,9 +15,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/business-profile")
 public class BusinessProfileController {
+    private final BusinessProfileService businessProfileService;
 
     @Autowired
-    private BusinessProfileService businessProfileService;
+    public BusinessProfileController(
+            BusinessProfileService businessProfileService
+    ) {
+        this.businessProfileService = businessProfileService;
+    }
 
     @PostMapping
     public ResponseEntity<ResponseWrapper<BusinessProfileResponse>> createBusinessProfile(

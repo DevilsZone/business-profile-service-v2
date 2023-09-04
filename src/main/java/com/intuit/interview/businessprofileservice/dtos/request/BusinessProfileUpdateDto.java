@@ -6,10 +6,10 @@ import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.URL;
 
 @Data
 @NoArgsConstructor
@@ -25,7 +25,7 @@ public class BusinessProfileUpdateDto {
     @Nullable
     private String email;
 
-    @URL
+    @Pattern(regexp = "^(http|https)://.*$", message = "Invalid URL format")
     @Nullable
     private String website;
 
