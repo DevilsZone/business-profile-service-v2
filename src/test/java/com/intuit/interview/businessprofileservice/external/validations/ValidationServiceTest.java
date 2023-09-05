@@ -26,9 +26,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest
 public class ValidationServiceTest {
 
-    private final List<ProductValidationService> allServices;
-
     private static MockWebServer mockWebServer;
+
+    private final List<ProductValidationService> allServices;
 
     @Autowired
     public ValidationServiceTest(ApplicationContext context) {

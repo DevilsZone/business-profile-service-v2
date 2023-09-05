@@ -78,7 +78,7 @@ public class BusinessProfileTransformer {
         }
         businessProfile.setUpdatedBy(businessProfile.getUpdatedBy());
         businessProfile.setUpdatedAt(Instant.now().toEpochMilli());
-        businessProfile.setVersion(businessProfile.getVersion()+1);
+        businessProfile.setVersion(businessProfile.getVersion() + 1);
         return businessProfile;
     }
 

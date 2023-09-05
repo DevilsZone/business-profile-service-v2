@@ -11,10 +11,13 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 @Service
-public class QuickBookPayrollValidationServiceImpl  implements ProductValidationService {
+public class QuickBookPayrollValidationServiceImpl implements ProductValidationService {
     private final WebClient webClient;
+
     private final String createUri;
+
     private final String updateUri;
+
     private final String deleteUri;
 
     @Autowired

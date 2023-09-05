@@ -56,7 +56,8 @@ public class BusinessProfileServiceImplTest {
 
     @Test
     public void testCreateBusinessProfile_Failure() {
-        when(businessProfileRepository.getBusinessProfileByLegalName(any())).thenReturn(BusinessProfileBuilderForTests.createBusinessProfile());
+        when(businessProfileRepository.getBusinessProfileByLegalName(any())).thenReturn(
+                BusinessProfileBuilderForTests.createBusinessProfile());
         assertThrows(
                 AppException.class,
                 () -> businessProfileService.createBusinessProfile(
@@ -67,7 +68,8 @@ public class BusinessProfileServiceImplTest {
 
     @Test
     public void testUpdateBusinessProfile() {
-        BusinessProfileUpdateDto updateDto = BusinessProfileBuilderForTests.createBusinessProfileUpdateDto(); // Populate this with mock data
+        BusinessProfileUpdateDto updateDto =
+                BusinessProfileBuilderForTests.createBusinessProfileUpdateDto(); // Populate this with mock data
         when(businessProfileRepository.getBusinessProfileByLegalName(any())).thenReturn(
                 BusinessProfileBuilderForTests.createBusinessProfile()
         );
@@ -103,9 +105,16 @@ public class BusinessProfileServiceImplTest {
     }
 
     @Test
+    public void testGetBusinessProfileByLegalName_Failure() {
+        when(businessProfileRepository.getBusinessProfileByLegalName(any())).thenReturn(null);
+        assertThrows(AppException.class, () -> businessProfileService.getBusinessProfileByLegalName(any()));
+    }
+
+    @Test
     public void testDeleteBusinessProfile() {
         BusinessProfileDeleteDto deleteDto = new BusinessProfileDeleteDto(); // Populate with mock data if necessary
-        when(businessProfileRepository.getBusinessProfileByLegalName(any())).thenReturn(BusinessProfileBuilderForTests.createBusinessProfile());
+        when(businessProfileRepository.getBusinessProfileByLegalName(any())).thenReturn(
+                BusinessProfileBuilderForTests.createBusinessProfile());
         when(businessProfileRepository.deleteBusinessProfileByLegalName(any())).thenReturn(1L);
 
         boolean isDeleted = businessProfileService.deleteBusinessProfile(deleteDto);
@@ -116,7 +125,8 @@ public class BusinessProfileServiceImplTest {
     @Test
     public void testDeleteBusinessProfile_Failure() {
         BusinessProfileDeleteDto deleteDto = new BusinessProfileDeleteDto(); // Populate with mock data if necessary
-        when(businessProfileRepository.getBusinessProfileByLegalName(any())).thenReturn(BusinessProfileBuilderForTests.createBusinessProfile());
+        when(businessProfileRepository.getBusinessProfileByLegalName(any())).thenReturn(
+                BusinessProfileBuilderForTests.createBusinessProfile());
         when(businessProfileRepository.deleteBusinessProfileByLegalName(deleteDto.getLegalName())).thenReturn(0L);
 
         boolean isDeleted = businessProfileService.deleteBusinessProfile(deleteDto);

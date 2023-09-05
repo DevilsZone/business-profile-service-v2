@@ -40,7 +40,8 @@ public class BusinessProfileCommonTransformerTest {
                 "123456789"
         );
 
-        TaxIdentifiers taxIdentifiers = BusinessProfileCommonTransformer.convertTaxIdentifiersDtoToTaxIdentifiers(taxIdentifiersDto);
+        TaxIdentifiers taxIdentifiers =
+                BusinessProfileCommonTransformer.convertTaxIdentifiersDtoToTaxIdentifiers(taxIdentifiersDto);
 
         assertEquals(taxIdentifiersDto.getPan(), taxIdentifiers.getPan());
         assertEquals(taxIdentifiersDto.getEin(), taxIdentifiers.getEin());

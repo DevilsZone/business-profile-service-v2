@@ -27,12 +27,13 @@ public class BusinessProfileController {
     @PostMapping
     public ResponseEntity<ResponseWrapper<BusinessProfileResponse>> createBusinessProfile(
             @RequestBody @Valid BusinessProfileCreateDto createDto) {
-        BusinessProfileResponse response = businessProfileService.createBusinessProfile(createDto);
-        return ResponseEntity.status(HttpStatus.OK).body(ResponseWrapper.success(response));
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseWrapper.success(
+                businessProfileService.createBusinessProfile(createDto)
+        ));
     }
 
     @GetMapping
-    public ResponseEntity<ResponseWrapper<BusinessProfileResponse>> getBusinessProfileByCompanyName(
+    public ResponseEntity<ResponseWrapper<BusinessProfileResponse>> getBusinessProfileByLegalName(
             @RequestParam("legalName") String legalName) {
         return ResponseEntity.status(HttpStatus.OK).body(ResponseWrapper.success(
                 businessProfileService.getBusinessProfileByLegalName(legalName)
@@ -42,11 +43,9 @@ public class BusinessProfileController {
     @PutMapping
     public ResponseEntity<ResponseWrapper<BusinessProfileResponse>> updateBusinessProfile(
             @RequestBody BusinessProfileUpdateDto updateDto) {
-        BusinessProfileResponse response = businessProfileService.updateBusinessProfile(updateDto);
-        if (response != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(ResponseWrapper.success(response));
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseWrapper.success(
+                businessProfileService.updateBusinessProfile(updateDto)
+        ));
     }
 
     @DeleteMapping

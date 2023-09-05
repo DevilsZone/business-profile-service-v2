@@ -19,14 +19,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest
 public class BusinessProfileTransformerTest {
 
     private BusinessProfileCreateDto businessProfileCreateDto;
+
     private BusinessProfile businessProfile;
+
     private BusinessProfileUpdateDto businessProfileUpdateDto;
 
     @BeforeEach
@@ -72,11 +74,15 @@ public class BusinessProfileTransformerTest {
 
     @Test
     public void testConvertBusinessProfileCreateDtoToBusinessProfile() {
-        try (MockedStatic<BusinessProfileCommonTransformer> utilities = Mockito.mockStatic(BusinessProfileCommonTransformer.class)) {
-            utilities.when(() -> BusinessProfileCommonTransformer.convertAddressDtoToAddress(any())).thenReturn(new Address());
-            utilities.when(() -> BusinessProfileCommonTransformer.convertTaxIdentifiersDtoToTaxIdentifiers(any())).thenReturn(new TaxIdentifiers());
+        try (MockedStatic<BusinessProfileCommonTransformer> utilities = Mockito.mockStatic(
+                BusinessProfileCommonTransformer.class)) {
+            utilities.when(() -> BusinessProfileCommonTransformer.convertAddressDtoToAddress(any()))
+                    .thenReturn(new Address());
+            utilities.when(() -> BusinessProfileCommonTransformer.convertTaxIdentifiersDtoToTaxIdentifiers(any()))
+                    .thenReturn(new TaxIdentifiers());
 
-            BusinessProfile result = BusinessProfileTransformer.convertBusinessProfileCreateDtoToBusinessProfile(businessProfileCreateDto);
+            BusinessProfile result = BusinessProfileTransformer.convertBusinessProfileCreateDtoToBusinessProfile(
+                    businessProfileCreateDto);
 
             assertNotNull(result);
             assertEquals(businessProfileCreateDto.getCompanyName(), result.getCompanyName());
@@ -88,13 +94,17 @@ public class BusinessProfileTransformerTest {
 
     @Test
     public void testConvertBusinessProfileToBusinessProfileResponse() {
-        try (MockedStatic<BusinessProfileCommonTransformer> utilities = Mockito.mockStatic(BusinessProfileCommonTransformer.class)) {
-            utilities.when(() -> BusinessProfileCommonTransformer.convertAddressToAddressResponse(any())).thenReturn(AddressResponse.builder().build());
-            utilities.when(() -> BusinessProfileCommonTransformer.convertTaxIdentifiersToTaxIdentifiersResponse(any())).thenReturn(
-                    TaxIdentifiersResponse.builder().build()
-            );
+        try (MockedStatic<BusinessProfileCommonTransformer> utilities = Mockito.mockStatic(
+                BusinessProfileCommonTransformer.class)) {
+            utilities.when(() -> BusinessProfileCommonTransformer.convertAddressToAddressResponse(any()))
+                    .thenReturn(AddressResponse.builder().build());
+            utilities.when(() -> BusinessProfileCommonTransformer.convertTaxIdentifiersToTaxIdentifiersResponse(any()))
+                    .thenReturn(
+                            TaxIdentifiersResponse.builder().build()
+                    );
 
-            BusinessProfileResponse result = BusinessProfileTransformer.convertBusinessProfileToBusinessProfileResponse(businessProfile);
+            BusinessProfileResponse result =
+                    BusinessProfileTransformer.convertBusinessProfileToBusinessProfileResponse(businessProfile);
 
             assertNotNull(result);
             assertEquals(businessProfile.getCompanyName(), result.getCompanyName());
@@ -106,11 +116,16 @@ public class BusinessProfileTransformerTest {
 
     @Test
     public void testGetUpdatedBusinessProfileForUpdateRequest() {
-        try (MockedStatic<BusinessProfileCommonTransformer> utilities = Mockito.mockStatic(BusinessProfileCommonTransformer.class)) {
-            utilities.when(() -> BusinessProfileCommonTransformer.convertAddressDtoToAddress(any())).thenReturn(new Address());
-            utilities.when(() -> BusinessProfileCommonTransformer.convertTaxIdentifiersDtoToTaxIdentifiers(any())).thenReturn(new TaxIdentifiers());
+        try (MockedStatic<BusinessProfileCommonTransformer> utilities = Mockito.mockStatic(
+                BusinessProfileCommonTransformer.class)) {
+            utilities.when(() -> BusinessProfileCommonTransformer.convertAddressDtoToAddress(any()))
+                    .thenReturn(new Address());
+            utilities.when(() -> BusinessProfileCommonTransformer.convertTaxIdentifiersDtoToTaxIdentifiers(any()))
+                    .thenReturn(new TaxIdentifiers());
 
-            BusinessProfile result = BusinessProfileTransformer.getUpdatedBusinessProfileForUpdateRequest(businessProfile, businessProfileUpdateDto);
+            BusinessProfile result =
+                    BusinessProfileTransformer.getUpdatedBusinessProfileForUpdateRequest(businessProfile,
+                            businessProfileUpdateDto);
 
             assertNotNull(result);
             assertEquals(businessProfileUpdateDto.getCompanyName(), result.getCompanyName());

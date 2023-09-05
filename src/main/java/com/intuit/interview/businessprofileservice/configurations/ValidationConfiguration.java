@@ -14,8 +14,11 @@ import org.springframework.context.annotation.Configuration;
 public class ValidationConfiguration {
     // Quick Book Configuration
     private String quickbookBaseUrl;
+
     private String quickbookCreateUri;
+
     private String quickbookUpdateUri;
+
     private String quickbookDeleteUri;
     // Quick Book Payroll Configuration
 }
