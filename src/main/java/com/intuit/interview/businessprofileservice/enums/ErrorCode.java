@@ -11,6 +11,7 @@ public enum ErrorCode {
     INPUT_VALIDATION_ERROR("002", "Input Validation Error", null, null),
     BAD_REQUEST_ERROR("003", "Bad Request", null, null),
     NOT_FOUND_ERROR("004", "Response not found", null, null),
+    APP_ERROR("005", null, null, null),
     ;
 
     private final String code;

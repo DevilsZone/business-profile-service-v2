@@ -6,6 +6,7 @@ import com.intuit.interview.businessprofileservice.models.BusinessProfile;
 import io.github.resilience4j.bulkhead.annotation.Bulkhead;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -48,7 +49,7 @@ public class QuickBookValidationServiceImpl implements ProductValidationService 
     @CircuitBreaker(name = "quickBookValidationServiceImplUpdate", fallbackMethod = "fallbackForValidate")
     @Bulkhead(name = "quickBookValidationServiceImplUpdate")
     public Mono<Void> validateBusinessProfileForUpdate(BusinessProfile businessProfile) {
-        return webClient.post()
+        return webClient.put()
                 .uri(updateUri)
                 .bodyValue(businessProfile)
                 .retrieve()
@@ -59,7 +60,7 @@ public class QuickBookValidationServiceImpl implements ProductValidationService 
     @CircuitBreaker(name = "quickBookValidationServiceImplDelete", fallbackMethod = "fallbackForValidate")
     @Bulkhead(name = "quickBookValidationServiceImplDelete")
     public Mono<Void> validateBusinessProfileForDelete(BusinessProfile businessProfile) {
-        return webClient.post()
+        return webClient.method(HttpMethod.DELETE)
                 .uri(deleteUri)
                 .bodyValue(businessProfile)
                 .retrieve()

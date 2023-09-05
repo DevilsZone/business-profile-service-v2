@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.intuit.interview.businessprofileservice.dtos.response.wrapper.ErrorResponse;
 import com.intuit.interview.businessprofileservice.dtos.response.wrapper.ResponseWrapper;
 import com.intuit.interview.businessprofileservice.enums.ErrorCode;
+import com.intuit.interview.businessprofileservice.exceptions.AppException;
 import com.intuit.interview.businessprofileservice.exceptions.RestException;
 import com.intuit.interview.businessprofileservice.utils.MessageConstants;
 import jakarta.validation.ConstraintViolationException;
@@ -30,6 +31,24 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {RestException.class})
     public ResponseEntity<ResponseWrapper<Void>> handleResponseException(RestException restException) {
         return buildErrorResponse(restException.getHttpStatus(), restException.getErrorResponses());
+    }
+
+    @ExceptionHandler(value = {AppException.class})
+    public ResponseEntity<ResponseWrapper<Void>> handleAppException(AppException appException) {
+        log.error(
+                String.format(
+                        MessageConstants.GLOBAL_EXCEPTION_HANDLER_CAPTURE_MESSAGE,
+                        appException.getClass().getName()
+                ),
+                appException
+        );
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .message(appException.getMessage())
+                .errorCode(ErrorCode.APP_ERROR.getCode())
+                .build();
+        List<ErrorResponse> errorResponses = new ArrayList<>();
+        errorResponses.add(errorResponse);
+        return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, errorResponses);
     }
 
     @ExceptionHandler(value = {Throwable.class})
