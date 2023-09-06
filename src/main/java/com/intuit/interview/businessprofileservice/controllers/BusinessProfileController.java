@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/business-profile")
+@CrossOrigin("http://localhost:3000")
 public class BusinessProfileController {
     private final BusinessProfileService businessProfileService;
 
