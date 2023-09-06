@@ -6,6 +6,9 @@ import com.intuit.interview.businessprofileservice.dtos.request.BusinessProfileU
 import com.intuit.interview.businessprofileservice.dtos.response.BusinessProfileResponse;
 import com.intuit.interview.businessprofileservice.dtos.response.wrapper.ResponseWrapper;
 import com.intuit.interview.businessprofileservice.services.BusinessProfileService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,6 +29,13 @@ public class BusinessProfileController {
     }
 
     @PostMapping
+    @Operation(summary = "Create new business profile")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully create new Profile"),
+            @ApiResponse(responseCode = "401", description = "You are not authorized to view the resource"),
+            @ApiResponse(responseCode = "403", description = "Accessing the resource you were trying to reach is forbidden"),
+            @ApiResponse(responseCode = "404", description = "The resource you were trying to reach is not found")
+    })
     public ResponseEntity<ResponseWrapper<BusinessProfileResponse>> createBusinessProfile(
             @RequestBody @Valid BusinessProfileCreateDto createDto) {
         return ResponseEntity.status(HttpStatus.OK).body(ResponseWrapper.success(
@@ -34,6 +44,13 @@ public class BusinessProfileController {
     }
 
     @GetMapping
+    @Operation(summary = "Get business profile against a legal name")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully fetched Profile"),
+            @ApiResponse(responseCode = "401", description = "You are not authorized to view the resource"),
+            @ApiResponse(responseCode = "403", description = "Accessing the resource you were trying to reach is forbidden"),
+            @ApiResponse(responseCode = "404", description = "The resource you were trying to reach is not found")
+    })
     public ResponseEntity<ResponseWrapper<BusinessProfileResponse>> getBusinessProfileByLegalName(
             @RequestParam("legalName") String legalName) {
         return ResponseEntity.status(HttpStatus.OK).body(ResponseWrapper.success(
@@ -42,6 +59,13 @@ public class BusinessProfileController {
     }
 
     @PutMapping
+    @Operation(summary = "Update business profile")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully update Profile"),
+            @ApiResponse(responseCode = "401", description = "You are not authorized to view the resource"),
+            @ApiResponse(responseCode = "403", description = "Accessing the resource you were trying to reach is forbidden"),
+            @ApiResponse(responseCode = "404", description = "The resource you were trying to reach is not found")
+    })
     public ResponseEntity<ResponseWrapper<BusinessProfileResponse>> updateBusinessProfile(
             @RequestBody BusinessProfileUpdateDto updateDto) {
         return ResponseEntity.status(HttpStatus.OK).body(ResponseWrapper.success(
@@ -50,6 +74,13 @@ public class BusinessProfileController {
     }
 
     @DeleteMapping
+    @Operation(summary = "Remove a business profile")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Successfully delete Profile"),
+            @ApiResponse(responseCode = "401", description = "You are not authorized to view the resource"),
+            @ApiResponse(responseCode = "403", description = "Accessing the resource you were trying to reach is forbidden"),
+            @ApiResponse(responseCode = "404", description = "The resource you were trying to reach is not found")
+    })
     public ResponseEntity<ResponseWrapper<Void>> deleteBusinessProfile(
             @RequestBody BusinessProfileDeleteDto deleteDto) {
         boolean deleted = businessProfileService.deleteBusinessProfile(deleteDto);
