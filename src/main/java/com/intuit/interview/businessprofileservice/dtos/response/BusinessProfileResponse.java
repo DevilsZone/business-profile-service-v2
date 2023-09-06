@@ -2,7 +2,10 @@ package com.intuit.interview.businessprofileservice.dtos.response;
 
 import com.intuit.interview.businessprofileservice.dtos.response.common.AddressResponse;
 import com.intuit.interview.businessprofileservice.dtos.response.common.TaxIdentifiersResponse;
+import com.intuit.interview.businessprofileservice.models.common.BusinessProfileProduct;
 import lombok.*;
+
+import java.util.Set;
 
 @Getter
 @Setter
@@ -22,6 +25,8 @@ public class BusinessProfileResponse {
     private AddressResponse legalAddress;
 
     private TaxIdentifiersResponse taxIdentifiers;
+
+    private Set<BusinessProfileProduct> profileProductList;
 
     private String createdBy;
 }

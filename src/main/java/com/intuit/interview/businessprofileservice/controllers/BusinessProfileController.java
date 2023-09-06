@@ -2,6 +2,7 @@ package com.intuit.interview.businessprofileservice.controllers;
 
 import com.intuit.interview.businessprofileservice.dtos.request.BusinessProfileCreateDto;
 import com.intuit.interview.businessprofileservice.dtos.request.BusinessProfileDeleteDto;
+import com.intuit.interview.businessprofileservice.dtos.request.BusinessProfileProductsUpdateDto;
 import com.intuit.interview.businessprofileservice.dtos.request.BusinessProfileUpdateDto;
 import com.intuit.interview.businessprofileservice.dtos.response.BusinessProfileResponse;
 import com.intuit.interview.businessprofileservice.dtos.response.wrapper.ResponseWrapper;
@@ -41,6 +42,20 @@ public class BusinessProfileController {
         return ResponseEntity.status(HttpStatus.OK).body(ResponseWrapper.success(
                 businessProfileService.createBusinessProfile(createDto)
         ));
+    }
+
+    @PutMapping(path = "/products")
+    @Operation(summary = "Add Products to business profile")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Successfully added products to Profile"),
+            @ApiResponse(responseCode = "401", description = "You are not authorized to view the resource"),
+            @ApiResponse(responseCode = "403", description = "Accessing the resource you were trying to reach is forbidden"),
+            @ApiResponse(responseCode = "404", description = "The resource you were trying to reach is not found")
+    })
+    public ResponseEntity<ResponseWrapper<Void>> updateBusinessProfileServices(
+            @RequestBody @Valid BusinessProfileProductsUpdateDto businessProfileProductsUpdateDto) {
+        businessProfileService.updateBusinessProfileProducts(businessProfileProductsUpdateDto);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @GetMapping

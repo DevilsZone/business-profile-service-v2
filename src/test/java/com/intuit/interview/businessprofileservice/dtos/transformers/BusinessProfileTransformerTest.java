@@ -1,14 +1,18 @@
 package com.intuit.interview.businessprofileservice.dtos.transformers;
 
+import com.intuit.interview.businessprofileservice.builders.BusinessProfileBuilderForTests;
 import com.intuit.interview.businessprofileservice.dtos.request.BusinessProfileCreateDto;
+import com.intuit.interview.businessprofileservice.dtos.request.BusinessProfileProductsUpdateDto;
 import com.intuit.interview.businessprofileservice.dtos.request.BusinessProfileUpdateDto;
 import com.intuit.interview.businessprofileservice.dtos.request.common.AddressDto;
 import com.intuit.interview.businessprofileservice.dtos.request.common.TaxIdentifiersDto;
 import com.intuit.interview.businessprofileservice.dtos.response.BusinessProfileResponse;
 import com.intuit.interview.businessprofileservice.dtos.response.common.AddressResponse;
 import com.intuit.interview.businessprofileservice.dtos.response.common.TaxIdentifiersResponse;
+import com.intuit.interview.businessprofileservice.enums.Product;
 import com.intuit.interview.businessprofileservice.models.BusinessProfile;
 import com.intuit.interview.businessprofileservice.models.common.Address;
+import com.intuit.interview.businessprofileservice.models.common.BusinessProfileProduct;
 import com.intuit.interview.businessprofileservice.models.common.TaxIdentifiers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +20,12 @@ import org.junit.jupiter.api.TestInstance;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -82,13 +92,37 @@ public class BusinessProfileTransformerTest {
                     .thenReturn(new TaxIdentifiers());
 
             BusinessProfile result = BusinessProfileTransformer.convertBusinessProfileCreateDtoToBusinessProfile(
-                    businessProfileCreateDto);
+                    businessProfileCreateDto
+            );
 
             assertNotNull(result);
             assertEquals(businessProfileCreateDto.getCompanyName(), result.getCompanyName());
             assertEquals(businessProfileCreateDto.getLegalName(), result.getLegalName());
             assertEquals(businessProfileCreateDto.getEmail(), result.getEmail());
             assertEquals(businessProfileCreateDto.getWebsite(), result.getWebsite());
+            assertEquals(0, result.getBusinessProfileProducts().size());
+        }
+    }
+
+    @Test
+    public void testConvertBusinessProfileCreateDtoToBusinessProfileWithProduct() {
+        try (MockedStatic<BusinessProfileCommonTransformer> utilities = Mockito.mockStatic(
+                BusinessProfileCommonTransformer.class)) {
+            utilities.when(() -> BusinessProfileCommonTransformer.convertAddressDtoToAddress(any()))
+                    .thenReturn(new Address());
+            utilities.when(() -> BusinessProfileCommonTransformer.convertTaxIdentifiersDtoToTaxIdentifiers(any()))
+                    .thenReturn(new TaxIdentifiers());
+            businessProfileCreateDto.setProduct(Product.QUICK_BOOK);
+            BusinessProfile result = BusinessProfileTransformer.convertBusinessProfileCreateDtoToBusinessProfile(
+                    businessProfileCreateDto
+            );
+
+            assertNotNull(result);
+            assertEquals(businessProfileCreateDto.getCompanyName(), result.getCompanyName());
+            assertEquals(businessProfileCreateDto.getLegalName(), result.getLegalName());
+            assertEquals(businessProfileCreateDto.getEmail(), result.getEmail());
+            assertEquals(businessProfileCreateDto.getWebsite(), result.getWebsite());
+            assertEquals(1, result.getBusinessProfileProducts().size());
         }
     }
 
@@ -133,6 +167,85 @@ public class BusinessProfileTransformerTest {
             assertEquals(businessProfileUpdateDto.getEmail(), result.getEmail());
             assertEquals(businessProfileUpdateDto.getWebsite(), result.getWebsite());
         }
+    }
+
+    @Test
+    public void testManageBusinessProfileProducts() {
+        BusinessProfile businessProfile = BusinessProfileBuilderForTests.createBusinessProfile();
+        businessProfile.setBusinessProfileProducts(new HashSet<>());
+        BusinessProfileProductsUpdateDto businessProfileProductsUpdateDto = new BusinessProfileProductsUpdateDto();
+        businessProfileProductsUpdateDto.setLegalName(businessProfile.getLegalName());
+        List<Product> addedProducts = new ArrayList<>();
+        List<Product> removedProducts = new ArrayList<>();
+        addedProducts.add(Product.QUICK_BOOK);
+        businessProfileProductsUpdateDto.setProductsToBeAdded(addedProducts);
+        businessProfileProductsUpdateDto.setProductsToBeRemoved(removedProducts);
+        Set<BusinessProfileProduct> businessProfileProduct = businessProfile.getBusinessProfileProducts();
+        businessProfileProduct
+                .addAll(
+                        businessProfileProductsUpdateDto
+                                .getProductsToBeAdded()
+                                .stream()
+                                .map(data ->
+                                        BusinessProfileProduct.builder()
+                                                .product(data)
+                                                .build()
+                                )
+                                .collect(Collectors.toSet())
+                );
+        businessProfileProduct.removeAll(
+                businessProfileProductsUpdateDto
+                        .getProductsToBeRemoved()
+                        .stream()
+                        .map(data ->
+                                BusinessProfileProduct.builder().product(data).build()
+                        )
+                        .collect(Collectors.toSet())
+        );
+        BusinessProfile updatedProfile = BusinessProfileTransformer.manageBusinessProfileProducts(businessProfile,
+                businessProfileProductsUpdateDto);
+        assertEquals(businessProfileProduct, updatedProfile.getBusinessProfileProducts());
+    }
+
+    @Test
+    public void testManageBusinessProfileProducts_WithRemoval() {
+        BusinessProfile businessProfile = BusinessProfileBuilderForTests.createBusinessProfile();
+        Set<BusinessProfileProduct> existingProducts = new HashSet<>();
+        existingProducts.add(BusinessProfileProduct.builder().product(Product.QUICK_BOOK_PAYROLL).build());
+        businessProfile.setBusinessProfileProducts(existingProducts);
+        BusinessProfileProductsUpdateDto businessProfileProductsUpdateDto = new BusinessProfileProductsUpdateDto();
+        businessProfileProductsUpdateDto.setLegalName(businessProfile.getLegalName());
+        List<Product> addedProducts = new ArrayList<>();
+        List<Product> removedProducts = new ArrayList<>();
+        addedProducts.add(Product.QUICK_BOOK);
+        removedProducts.add(Product.QUICK_BOOK_PAYROLL);
+        businessProfileProductsUpdateDto.setProductsToBeAdded(addedProducts);
+        businessProfileProductsUpdateDto.setProductsToBeRemoved(removedProducts);
+        Set<BusinessProfileProduct> businessProfileProduct = businessProfile.getBusinessProfileProducts();
+        businessProfileProduct
+                .addAll(
+                        businessProfileProductsUpdateDto
+                                .getProductsToBeAdded()
+                                .stream()
+                                .map(data ->
+                                        BusinessProfileProduct.builder()
+                                                .product(data)
+                                                .build()
+                                )
+                                .collect(Collectors.toSet())
+                );
+        businessProfileProduct.removeAll(
+                businessProfileProductsUpdateDto
+                        .getProductsToBeRemoved()
+                        .stream()
+                        .map(data ->
+                                BusinessProfileProduct.builder().product(data).build()
+                        )
+                        .collect(Collectors.toSet())
+        );
+        BusinessProfile updatedProfile = BusinessProfileTransformer.manageBusinessProfileProducts(businessProfile,
+                businessProfileProductsUpdateDto);
+        assertEquals(businessProfileProduct, updatedProfile.getBusinessProfileProducts());
     }
 }
 

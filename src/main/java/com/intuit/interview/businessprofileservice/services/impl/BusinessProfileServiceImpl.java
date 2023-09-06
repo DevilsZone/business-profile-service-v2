@@ -2,6 +2,7 @@ package com.intuit.interview.businessprofileservice.services.impl;
 
 import com.intuit.interview.businessprofileservice.dtos.request.BusinessProfileCreateDto;
 import com.intuit.interview.businessprofileservice.dtos.request.BusinessProfileDeleteDto;
+import com.intuit.interview.businessprofileservice.dtos.request.BusinessProfileProductsUpdateDto;
 import com.intuit.interview.businessprofileservice.dtos.request.BusinessProfileUpdateDto;
 import com.intuit.interview.businessprofileservice.dtos.response.BusinessProfileResponse;
 import com.intuit.interview.businessprofileservice.dtos.transformers.BusinessProfileTransformer;
@@ -79,6 +80,23 @@ public class BusinessProfileServiceImpl implements BusinessProfileService {
     }
 
     @Override
+    public void updateBusinessProfileProducts(BusinessProfileProductsUpdateDto businessProfileProductsUpdateDto) {
+        if (businessProfileProductsUpdateDto.getProductsToBeAdded().isEmpty() && businessProfileProductsUpdateDto.getProductsToBeRemoved().isEmpty()) {
+            throw new AppException(ErrorCause.NO_PRODUCT_PROVIDED.name());
+        }
+        BusinessProfile businessProfile = businessProfileRepository.getBusinessProfileByLegalName(
+                businessProfileProductsUpdateDto.getLegalName()
+        );
+        if (businessProfile == null) {
+            throw new AppException(ErrorCause.BUSINESS_PROFILE_NOT_FOUND.name());
+        }
+        BusinessProfile updatedBusinessProfile =
+                BusinessProfileTransformer.manageBusinessProfileProducts(businessProfile,
+                businessProfileProductsUpdateDto);
+        businessProfileRepository.save(updatedBusinessProfile);
+    }
+
+    @Override
     public boolean deleteBusinessProfile(BusinessProfileDeleteDto deleteDto) {
         BusinessProfile businessProfile = businessProfileRepository.getBusinessProfileByLegalName(
                 deleteDto.getLegalName()
@@ -93,7 +111,7 @@ public class BusinessProfileServiceImpl implements BusinessProfileService {
 
     public void validateBusinessProfileForCreate(BusinessProfile businessProfile) {
         List<Mono<Void>> futures = new ArrayList<>();
-        for (ProductValidationService service : productValidationServiceList) {
+        for (ProductValidationService service : getFilteredProductValidationService(businessProfile)) {
             Mono<Void> validation = service.validateBusinessProfileForCreate(businessProfile)
                     .subscribeOn(Schedulers.boundedElastic());
             futures.add(validation);
@@ -107,7 +125,7 @@ public class BusinessProfileServiceImpl implements BusinessProfileService {
 
     public void validateBusinessProfileForUpdate(BusinessProfile businessProfile) {
         List<Mono<Void>> futures = new ArrayList<>();
-        for (ProductValidationService service : productValidationServiceList) {
+        for (ProductValidationService service : getFilteredProductValidationService(businessProfile)) {
             Mono<Void> validation = service.validateBusinessProfileForUpdate(businessProfile)
                     .subscribeOn(Schedulers.boundedElastic());
             futures.add(validation);
@@ -121,7 +139,7 @@ public class BusinessProfileServiceImpl implements BusinessProfileService {
 
     public void validateBusinessProfileForDelete(BusinessProfile businessProfile) {
         List<Mono<Void>> futures = new ArrayList<>();
-        for (ProductValidationService service : productValidationServiceList) {
+        for (ProductValidationService service : getFilteredProductValidationService(businessProfile)) {
             Mono<Void> validation = service.validateBusinessProfileForDelete(businessProfile)
                     .subscribeOn(Schedulers.boundedElastic());
             futures.add(validation);
@@ -131,6 +149,17 @@ public class BusinessProfileServiceImpl implements BusinessProfileService {
         } catch (Exception e) {
             throw new AppException(ErrorCause.VALIDATION_FAILED.name());
         }
+    }
+
+    private List<ProductValidationService> getFilteredProductValidationService(BusinessProfile businessProfile) {
+        return productValidationServiceList
+                .stream()
+                .filter(data ->
+                        businessProfile
+                                .getBusinessProfileProducts()
+                                .contains(data.getProduct())
+                )
+                .toList();
     }
 
 }

@@ -3,6 +3,7 @@ package com.intuit.interview.businessprofileservice.dtos.request;
 
 import com.intuit.interview.businessprofileservice.dtos.request.common.AddressDto;
 import com.intuit.interview.businessprofileservice.dtos.request.common.TaxIdentifiersDto;
+import com.intuit.interview.businessprofileservice.enums.Product;
 import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
@@ -41,5 +42,8 @@ public class BusinessProfileCreateDto {
 
     @NotBlank
     private String createdBy;
+
+    @Nullable
+    private Product product;
 }
 

@@ -1,11 +1,14 @@
 package com.intuit.interview.businessprofileservice.models;
 
 import com.intuit.interview.businessprofileservice.models.common.Address;
+import com.intuit.interview.businessprofileservice.models.common.BusinessProfileProduct;
 import com.intuit.interview.businessprofileservice.models.common.TaxIdentifiers;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.Set;
 
 @Getter
 @Setter
@@ -33,5 +36,7 @@ public class BusinessProfile extends BaseEntity {
     private Address legalAddress;
 
     private TaxIdentifiers taxIdentifiers;
+
+    private Set<BusinessProfileProduct> businessProfileProducts;
 }
 

@@ -1,8 +1,10 @@
 package com.intuit.interview.businessprofileservice.external.validations.impl;
 
 import com.intuit.interview.businessprofileservice.configurations.ValidationConfiguration;
+import com.intuit.interview.businessprofileservice.enums.Product;
 import com.intuit.interview.businessprofileservice.external.validations.ProductValidationService;
 import com.intuit.interview.businessprofileservice.models.BusinessProfile;
+import com.intuit.interview.businessprofileservice.models.common.BusinessProfileProduct;
 import io.github.resilience4j.bulkhead.annotation.Bulkhead;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,11 @@ public class QuickBookValidationServiceImpl implements ProductValidationService 
         this.createUri = validationConfiguration.getQuickbookCreateUri();
         this.updateUri = validationConfiguration.getQuickbookUpdateUri();
         this.deleteUri = validationConfiguration.getQuickbookDeleteUri();
+    }
+
+    @Override
+    public BusinessProfileProduct getProduct() {
+        return BusinessProfileProduct.builder().product(Product.QUICK_BOOK).build();
     }
 
     @Override

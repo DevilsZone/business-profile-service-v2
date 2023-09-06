@@ -2,6 +2,7 @@ package com.intuit.interview.businessprofileservice.services;
 
 import com.intuit.interview.businessprofileservice.dtos.request.BusinessProfileCreateDto;
 import com.intuit.interview.businessprofileservice.dtos.request.BusinessProfileDeleteDto;
+import com.intuit.interview.businessprofileservice.dtos.request.BusinessProfileProductsUpdateDto;
 import com.intuit.interview.businessprofileservice.dtos.request.BusinessProfileUpdateDto;
 import com.intuit.interview.businessprofileservice.dtos.response.BusinessProfileResponse;
 
@@ -30,6 +31,13 @@ public interface BusinessProfileService {
      * @return The updated BusinessProfileResponse, or null if the operation was unsuccessful.
      */
     BusinessProfileResponse updateBusinessProfile(BusinessProfileUpdateDto updateDto);
+
+    /**
+     * Update an existing BusinessProfile using the provided DTO.
+     *
+     * @param businessProfileProductsUpdateDto Data to update applicable services an existing BusinessProfile.
+     */
+    void updateBusinessProfileProducts(BusinessProfileProductsUpdateDto businessProfileProductsUpdateDto);
 
     /**
      * Delete a BusinessProfile based on the company name.
