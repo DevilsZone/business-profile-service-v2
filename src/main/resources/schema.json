@@ -1,0 +1,110 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["version", "company_name", "legal_name", "email", "tax_identifiers", "business_address", "legal_address", "createdAt", "updatedAt", "createdBy", "updatedBy", "businessProfileProducts"],
+  "properties": {
+    "version": {
+      "type": "integer",
+      "description": "Version number of the record"
+    },
+    "company_name": {
+      "type": "string",
+      "description": "Name of the company"
+    },
+    "legal_name": {
+      "type": "string",
+      "description": "Legal name of the business"
+    },
+    "email": {
+      "type": "string",
+      "description": "Contact email of the business",
+      "format": "email"
+    },
+    "website": {
+      "type": "string",
+      "description": "Website of the business",
+      "format": "uri"
+    },
+    "tax_identifiers": {
+      "type": "object",
+      "required": ["pan", "ein"],
+      "properties": {
+        "pan": {
+          "type": "string",
+          "description": "Permanent Account Number"
+        },
+        "ein": {
+          "type": "string",
+          "description": "Employer Identification Number"
+        }
+      }
+    },
+    "business_address": {
+      "$ref": "#/definitions/address"
+    },
+    "legal_address": {
+      "$ref": "#/definitions/address"
+    },
+    "businessProfileProducts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["product"],
+        "properties": {
+          "product": {
+            "type": "string",
+            "description": "Authorized products against the profile"
+          }
+        }
+      }
+    },
+    "createdAt": {
+      "type": "integer",
+      "description": "Timestamp when the record was created"
+    },
+    "updatedAt": {
+      "type": "integer",
+      "description": "Timestamp when the record was last updated"
+    },
+    "createdBy": {
+      "type": "string",
+      "description": "User or entity who created the record"
+    },
+    "updatedBy": {
+      "type": "string",
+      "description": "User or entity who last updated the record"
+    }
+  },
+  "definitions": {
+    "address": {
+      "type": "object",
+      "required": ["line1", "city", "state", "country", "postal_code"],
+      "properties": {
+        "line1": {
+          "type": "string",
+          "description": "First line of the address"
+        },
+        "line2": {
+          "type": "string",
+          "description": "Second line of the address (optional)"
+        },
+        "city": {
+          "type": "string",
+          "description": "City of the address"
+        },
+        "state": {
+          "type": "string",
+          "description": "State or region of the address"
+        },
+        "country": {
+          "type": "string",
+          "description": "Country of the address"
+        },
+        "postal_code": {
+          "type": "string",
+          "description": "Postal or ZIP code of the address"
+        }
+      }
+    }
+  }
+}
