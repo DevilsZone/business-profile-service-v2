@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest
-public class ValidationServiceTest {
+class ValidationServiceTest {
 
     private static MockWebServer mockWebServer;
 
@@ -61,7 +61,7 @@ public class ValidationServiceTest {
 
     @ParameterizedTest
     @MethodSource("serviceImplementations")
-    public void testValidateBusinessProfileForCreate_Success(ProductValidationService service) {
+    void testValidateBusinessProfileForCreate_Success(ProductValidationService service) {
         mockWebServer.enqueue(new MockResponse().setResponseCode(200));
 
         BusinessProfile businessProfile = new BusinessProfile();
@@ -72,7 +72,7 @@ public class ValidationServiceTest {
 
     @ParameterizedTest
     @MethodSource("serviceImplementations")
-    public void testValidateBusinessProfileForCreate_Failure(ProductValidationService service) {
+    void testValidateBusinessProfileForCreate_Failure(ProductValidationService service) {
         mockWebServer.enqueue(new MockResponse().setResponseCode(500));
 
         BusinessProfile businessProfile = new BusinessProfile();
@@ -85,7 +85,7 @@ public class ValidationServiceTest {
 
     @ParameterizedTest
     @MethodSource("serviceImplementations")
-    public void testValidateBusinessProfileForUpdate_Success(ProductValidationService service) {
+    void testValidateBusinessProfileForUpdate_Success(ProductValidationService service) {
         mockWebServer.enqueue(new MockResponse().setResponseCode(200));
 
         BusinessProfile businessProfile = new BusinessProfile();
@@ -96,7 +96,7 @@ public class ValidationServiceTest {
 
     @ParameterizedTest
     @MethodSource("serviceImplementations")
-    public void testValidateBusinessProfileForUpdate_Failure(ProductValidationService service) {
+    void testValidateBusinessProfileForUpdate_Failure(ProductValidationService service) {
         mockWebServer.enqueue(new MockResponse().setResponseCode(500));
 
         BusinessProfile businessProfile = new BusinessProfile();
@@ -109,7 +109,7 @@ public class ValidationServiceTest {
 
     @ParameterizedTest
     @MethodSource("serviceImplementations")
-    public void testValidateBusinessProfileForDelete_Success(ProductValidationService service) {
+    void testValidateBusinessProfileForDelete_Success(ProductValidationService service) {
         mockWebServer.enqueue(new MockResponse().setResponseCode(200));
 
         BusinessProfile businessProfile = new BusinessProfile();
@@ -120,7 +120,7 @@ public class ValidationServiceTest {
 
     @ParameterizedTest
     @MethodSource("serviceImplementations")
-    public void testValidateBusinessProfileForDelete_Failure(ProductValidationService service) {
+    void testValidateBusinessProfileForDelete_Failure(ProductValidationService service) {
         mockWebServer.enqueue(new MockResponse().setResponseCode(500));
 
         BusinessProfile businessProfile = new BusinessProfile();

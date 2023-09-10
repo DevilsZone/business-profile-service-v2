@@ -33,7 +33,7 @@ import static org.mockito.Mockito.any;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest
-public class BusinessProfileTransformerTest {
+class BusinessProfileTransformerTest {
 
     private BusinessProfileCreateDto businessProfileCreateDto;
 
@@ -83,7 +83,7 @@ public class BusinessProfileTransformerTest {
     }
 
     @Test
-    public void testConvertBusinessProfileCreateDtoToBusinessProfile() {
+    void testConvertBusinessProfileCreateDtoToBusinessProfile() {
         try (MockedStatic<BusinessProfileCommonTransformer> utilities = Mockito.mockStatic(
                 BusinessProfileCommonTransformer.class)) {
             utilities.when(() -> BusinessProfileCommonTransformer.convertAddressDtoToAddress(any()))
@@ -105,7 +105,7 @@ public class BusinessProfileTransformerTest {
     }
 
     @Test
-    public void testConvertBusinessProfileCreateDtoToBusinessProfileWithProduct() {
+    void testConvertBusinessProfileCreateDtoToBusinessProfileWithProduct() {
         try (MockedStatic<BusinessProfileCommonTransformer> utilities = Mockito.mockStatic(
                 BusinessProfileCommonTransformer.class)) {
             utilities.when(() -> BusinessProfileCommonTransformer.convertAddressDtoToAddress(any()))
@@ -127,7 +127,7 @@ public class BusinessProfileTransformerTest {
     }
 
     @Test
-    public void testConvertBusinessProfileToBusinessProfileResponse() {
+    void testConvertBusinessProfileToBusinessProfileResponse() {
         try (MockedStatic<BusinessProfileCommonTransformer> utilities = Mockito.mockStatic(
                 BusinessProfileCommonTransformer.class)) {
             utilities.when(() -> BusinessProfileCommonTransformer.convertAddressToAddressResponse(any()))
@@ -149,7 +149,7 @@ public class BusinessProfileTransformerTest {
     }
 
     @Test
-    public void testGetUpdatedBusinessProfileForUpdateRequest() {
+    void testGetUpdatedBusinessProfileForUpdateRequest() {
         try (MockedStatic<BusinessProfileCommonTransformer> utilities = Mockito.mockStatic(
                 BusinessProfileCommonTransformer.class)) {
             utilities.when(() -> BusinessProfileCommonTransformer.convertAddressDtoToAddress(any()))
@@ -170,7 +170,7 @@ public class BusinessProfileTransformerTest {
     }
 
     @Test
-    public void testManageBusinessProfileProducts() {
+    void testManageBusinessProfileProducts() {
         BusinessProfile businessProfile = BusinessProfileBuilderForTests.createBusinessProfile();
         businessProfile.setBusinessProfileProducts(new HashSet<>());
         BusinessProfileProductsUpdateDto businessProfileProductsUpdateDto = new BusinessProfileProductsUpdateDto();
@@ -208,7 +208,7 @@ public class BusinessProfileTransformerTest {
     }
 
     @Test
-    public void testManageBusinessProfileProducts_WithRemoval() {
+    void testManageBusinessProfileProducts_WithRemoval() {
         BusinessProfile businessProfile = BusinessProfileBuilderForTests.createBusinessProfile();
         Set<BusinessProfileProduct> existingProducts = new HashSet<>();
         existingProducts.add(BusinessProfileProduct.builder().product(Product.QUICK_BOOK_PAYROLL).build());

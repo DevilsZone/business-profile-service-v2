@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @DataMongoTest
 @Import(TestBusinessProfileServiceApplication.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class BusinessProfileRepositoryTest {
+class BusinessProfileRepositoryTest {
 
     @Autowired
     private BusinessProfileRepository repository;
@@ -37,7 +37,7 @@ public class BusinessProfileRepositoryTest {
     }
 
     @Test
-    public void testSaveBusinessProfile() {
+    void testSaveBusinessProfile() {
         BusinessProfile profile = new BusinessProfile();
         profile.setLegalName("Company A");
 
@@ -47,7 +47,7 @@ public class BusinessProfileRepositoryTest {
     }
 
     @Test
-    public void testGetBusinessProfileByLegalName() {
+    void testGetBusinessProfileByLegalName() {
         BusinessProfile profile = new BusinessProfile();
         profile.setLegalName("Company B");
         // Set other fields...
@@ -60,7 +60,7 @@ public class BusinessProfileRepositoryTest {
     }
 
     @Test
-    public void testDeleteBusinessProfileByLegalName() {
+    void testDeleteBusinessProfileByLegalName() {
         BusinessProfile profile = new BusinessProfile();
         profile.setLegalName("Company C");
         // Set other fields...

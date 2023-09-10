@@ -41,7 +41,7 @@ class BusinessProfileControllerTest {
     private BusinessProfileService businessProfileService;
 
     @Test
-    public void getBusinessProfileByLegalName() throws Exception {
+    void getBusinessProfileByLegalName() throws Exception {
         BusinessProfileResponse businessProfileResponse =
                 BusinessProfileBuilderForTests.createBusinessProfileResponse();
         // Mock the behavior of businessProfileService
@@ -63,7 +63,7 @@ class BusinessProfileControllerTest {
     }
 
     @Test
-    public void getBusinessProfileByLegalName_Failure() throws Exception {
+    void getBusinessProfileByLegalName_Failure() throws Exception {
         // Mock the behavior of businessProfileService
         when(businessProfileService.getBusinessProfileByLegalName(any())).thenThrow(
                 new AppException(ErrorCause.BUSINESS_PROFILE_NOT_FOUND.name()));
@@ -78,7 +78,7 @@ class BusinessProfileControllerTest {
     }
 
     @Test
-    public void createBusinessProfile() throws Exception {
+    void createBusinessProfile() throws Exception {
         BusinessProfileResponse businessProfileResponse =
                 BusinessProfileBuilderForTests.createBusinessProfileResponse();
         // Mock the behavior of businessProfileService
@@ -102,7 +102,7 @@ class BusinessProfileControllerTest {
     }
 
     @Test
-    public void createBusinessProfile_Failure() throws Exception {
+    void createBusinessProfile_Failure() throws Exception {
         // Mock the behavior of businessProfileService
         when(businessProfileService.createBusinessProfile(any())).thenThrow(
                 new AppException(ErrorCause.EXISTING_BUSINESS_PROFILE.name()));
@@ -119,7 +119,7 @@ class BusinessProfileControllerTest {
     }
 
     @Test
-    public void updateBusinessProfile() throws Exception {
+    void updateBusinessProfile() throws Exception {
         BusinessProfileResponse businessProfileResponse =
                 BusinessProfileBuilderForTests.createBusinessProfileResponse();
         // Mock the behavior of businessProfileService
@@ -144,7 +144,7 @@ class BusinessProfileControllerTest {
     }
 
     @Test
-    public void updateBusinessProfile_Failure() throws Exception {
+    void updateBusinessProfile_Failure() throws Exception {
         // Mock the behavior of businessProfileService
         when(businessProfileService.updateBusinessProfile(any())).thenThrow(
                 new AppException(ErrorCause.BUSINESS_PROFILE_NOT_FOUND.name()));
@@ -162,7 +162,7 @@ class BusinessProfileControllerTest {
     }
 
     @Test
-    public void deleteBusinessProfile() throws Exception {
+    void deleteBusinessProfile() throws Exception {
         // Mock the behavior of businessProfileService
         when(businessProfileService.deleteBusinessProfile(any())).thenReturn(true);
 
@@ -178,7 +178,7 @@ class BusinessProfileControllerTest {
     }
 
     @Test
-    public void deleteBusinessProfile_Failure() throws Exception {
+    void deleteBusinessProfile_Failure() throws Exception {
         // Mock the behavior of businessProfileService
         when(businessProfileService.deleteBusinessProfile(any())).thenThrow(
                 new AppException(ErrorCause.BUSINESS_PROFILE_NOT_FOUND.name()));
@@ -195,7 +195,7 @@ class BusinessProfileControllerTest {
     }
 
     @Test
-    public void updateBusinessProfileProducts() throws Exception {
+    void updateBusinessProfileProducts() throws Exception {
         // Mock the behavior of businessProfileService
         doNothing().when(businessProfileService).updateBusinessProfileProducts(any());
 
@@ -211,7 +211,7 @@ class BusinessProfileControllerTest {
     }
 
     @Test
-    public void updateBusinessProfileProducts_Failure() throws Exception {
+    void updateBusinessProfileProducts_Failure() throws Exception {
         // Mock the behavior of businessProfileService
         doThrow(AppException.class).when(businessProfileService).updateBusinessProfileProducts(any());
 

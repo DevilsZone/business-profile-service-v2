@@ -29,7 +29,7 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
-public class BusinessProfileServiceImplTest {
+class BusinessProfileServiceImplTest {
 
     @Mock
     private BusinessProfileRepository businessProfileRepository;
@@ -52,7 +52,7 @@ public class BusinessProfileServiceImplTest {
     }
 
     @Test
-    public void testCreateBusinessProfile() {
+    void testCreateBusinessProfile() {
         when(businessProfileRepository.getBusinessProfileByLegalName(any())).thenReturn(null);
         when(businessProfileRepository.save(any())).thenReturn(BusinessProfileBuilderForTests.createBusinessProfile());
 
@@ -64,7 +64,7 @@ public class BusinessProfileServiceImplTest {
     }
 
     @Test
-    public void testCreateBusinessProfile_Failure() {
+    void testCreateBusinessProfile_Failure() {
         when(businessProfileRepository.getBusinessProfileByLegalName(any())).thenReturn(
                 BusinessProfileBuilderForTests.createBusinessProfile());
         assertThrows(
@@ -76,7 +76,7 @@ public class BusinessProfileServiceImplTest {
     }
 
     @Test
-    public void testUpdateBusinessProfile() {
+    void testUpdateBusinessProfile() {
         BusinessProfileUpdateDto updateDto =
                 BusinessProfileBuilderForTests.createBusinessProfileUpdateDto(); // Populate this with mock data
         when(businessProfileRepository.getBusinessProfileByLegalName(any())).thenReturn(
@@ -90,7 +90,7 @@ public class BusinessProfileServiceImplTest {
     }
 
     @Test
-    public void testUpdateBusinessProfile_Failure() {
+    void testUpdateBusinessProfile_Failure() {
         when(businessProfileRepository.getBusinessProfileByLegalName(any())).thenReturn(null);
         assertThrows(
                 AppException.class,
@@ -101,7 +101,7 @@ public class BusinessProfileServiceImplTest {
     }
 
     @Test
-    public void testGetBusinessProfileByLegalName() {
+    void testGetBusinessProfileByLegalName() {
         when(businessProfileRepository.getBusinessProfileByLegalName(any())).thenReturn(
                 BusinessProfileBuilderForTests.createBusinessProfile()
         );
@@ -114,13 +114,13 @@ public class BusinessProfileServiceImplTest {
     }
 
     @Test
-    public void testGetBusinessProfileByLegalName_Failure() {
+    void testGetBusinessProfileByLegalName_Failure() {
         when(businessProfileRepository.getBusinessProfileByLegalName(any())).thenReturn(null);
         assertThrows(AppException.class, () -> businessProfileService.getBusinessProfileByLegalName(any()));
     }
 
     @Test
-    public void testDeleteBusinessProfile() {
+    void testDeleteBusinessProfile() {
         BusinessProfileDeleteDto deleteDto = new BusinessProfileDeleteDto(); // Populate with mock data if necessary
         when(businessProfileRepository.getBusinessProfileByLegalName(any())).thenReturn(
                 BusinessProfileBuilderForTests.createBusinessProfile());
@@ -132,7 +132,7 @@ public class BusinessProfileServiceImplTest {
     }
 
     @Test
-    public void testDeleteBusinessProfile_Failure() {
+    void testDeleteBusinessProfile_Failure() {
         BusinessProfileDeleteDto deleteDto = new BusinessProfileDeleteDto(); // Populate with mock data if necessary
         when(businessProfileRepository.getBusinessProfileByLegalName(any())).thenReturn(
                 BusinessProfileBuilderForTests.createBusinessProfile());
@@ -144,7 +144,7 @@ public class BusinessProfileServiceImplTest {
     }
 
     @Test
-    public void testDeleteBusinessProfile_Failure_Fetch_Profile() {
+    void testDeleteBusinessProfile_Failure_Fetch_Profile() {
         BusinessProfileDeleteDto deleteDto = new BusinessProfileDeleteDto(); // Populate with mock data if necessary
         when(businessProfileRepository.getBusinessProfileByLegalName(any())).thenThrow(AppException.class);
 
@@ -152,7 +152,7 @@ public class BusinessProfileServiceImplTest {
     }
 
     @Test
-    public void testDeleteBusinessProfile_Failure_Fetch_Profile_Null() {
+    void testDeleteBusinessProfile_Failure_Fetch_Profile_Null() {
         BusinessProfileDeleteDto deleteDto = new BusinessProfileDeleteDto(); // Populate with mock data if necessary
         when(businessProfileRepository.getBusinessProfileByLegalName(any())).thenReturn(null);
 
@@ -160,7 +160,7 @@ public class BusinessProfileServiceImplTest {
     }
 
     @Test
-    public void testUpdateBusinessProfileProducts() {
+    void testUpdateBusinessProfileProducts() {
         BusinessProfile businessProfile = BusinessProfileBuilderForTests.createBusinessProfile();
         Set<BusinessProfileProduct> existingProducts = new HashSet<>();
         existingProducts.add(BusinessProfileProduct.builder().product(Product.QUICK_BOOK_PAYROLL).build());
@@ -183,7 +183,7 @@ public class BusinessProfileServiceImplTest {
     }
 
     @Test
-    public void testUpdateBusinessProfileProducts_Failure() {
+    void testUpdateBusinessProfileProducts_Failure() {
         BusinessProfile businessProfile = BusinessProfileBuilderForTests.createBusinessProfile();
         BusinessProfileProductsUpdateDto businessProfileProductsUpdateDto = new BusinessProfileProductsUpdateDto();
         businessProfileProductsUpdateDto.setLegalName(businessProfile.getLegalName());
@@ -204,7 +204,7 @@ public class BusinessProfileServiceImplTest {
     }
 
     @Test
-    public void testUpdateBusinessProfileProducts_Failure_EmptyList() {
+    void testUpdateBusinessProfileProducts_Failure_EmptyList() {
         BusinessProfile businessProfile = BusinessProfileBuilderForTests.createBusinessProfile();
         BusinessProfileProductsUpdateDto businessProfileProductsUpdateDto = new BusinessProfileProductsUpdateDto();
         businessProfileProductsUpdateDto.setLegalName(businessProfile.getLegalName());

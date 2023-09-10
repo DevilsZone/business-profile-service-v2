@@ -10,10 +10,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class BusinessProfileCommonTransformerTest {
+class BusinessProfileCommonTransformerTest {
 
     @Test
-    public void testConvertAddressDtoToAddress() {
+    void testConvertAddressDtoToAddress() {
         AddressDto addressDto = new AddressDto(
                 "123 Main St",
                 "Suite 456",
@@ -34,7 +34,7 @@ public class BusinessProfileCommonTransformerTest {
     }
 
     @Test
-    public void testConvertTaxIdentifiersDtoToTaxIdentifiers() {
+    void testConvertTaxIdentifiersDtoToTaxIdentifiers() {
         TaxIdentifiersDto taxIdentifiersDto = new TaxIdentifiersDto(
                 "ABCDE1234F",
                 "123456789"
@@ -48,7 +48,7 @@ public class BusinessProfileCommonTransformerTest {
     }
 
     @Test
-    public void testConvertAddressToAddressResponse() {
+    void testConvertAddressToAddressResponse() {
         Address address = Address.builder()
                 .line1("123 Main St")
                 .line2("Suite 456")
@@ -69,7 +69,7 @@ public class BusinessProfileCommonTransformerTest {
     }
 
     @Test
-    public void testConvertTaxIdentifiersToTaxIdentifiersResponse() {
+    void testConvertTaxIdentifiersToTaxIdentifiersResponse() {
         TaxIdentifiers taxIdentifiers = TaxIdentifiers.builder()
                 .pan("ABCDE1234F")
                 .ein("123456789")
